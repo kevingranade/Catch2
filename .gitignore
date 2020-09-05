@@ -6,7 +6,7 @@
 Debug
 Release
 *.user
-*.xcuserstate
+*.xcuserstate1111
 .DS_Store
 xcuserdata
 CatchSelfTest.xcscheme
