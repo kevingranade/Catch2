@@ -1940,27 +1940,6 @@ Tricky.tests.cpp:<line number>: PASSED:
   REQUIRE( true )
 
 -------------------------------------------------------------------------------
-Assorted miscellaneous tests
--------------------------------------------------------------------------------
-Approx.tests.cpp:<line number>
-...............................................................................
-
-Approx.tests.cpp:<line number>: PASSED:
-  REQUIRE( INFINITY == Approx(INFINITY) )
-with expansion:
-  inff == Approx( inf )
-
-Approx.tests.cpp:<line number>: PASSED:
-  REQUIRE( NAN != Approx(NAN) )
-with expansion:
-  nanf != Approx( nan )
-
-Approx.tests.cpp:<line number>: PASSED:
-  REQUIRE_FALSE( NAN == Approx(NAN) )
-with expansion:
-  !(nanf == Approx( nan ))
-
--------------------------------------------------------------------------------
 CAPTURE can deal with complex expressions
 -------------------------------------------------------------------------------
 Message.tests.cpp:<line number>
@@ -3041,9 +3020,6 @@ Matchers.tests.cpp:<line number>: PASSED:
 Matchers.tests.cpp:<line number>: PASSED:
   REQUIRE_NOTHROW( WithinULP(1., 0) )
 
-Matchers.tests.cpp:<line number>: PASSED:
-  REQUIRE_THROWS_AS( WithinULP(1., -1), std::domain_error )
-
 -------------------------------------------------------------------------------
 Floating point matchers: float
   Margin
@@ -3170,7 +3146,7 @@ Matchers.tests.cpp:<line number>: PASSED:
   REQUIRE_NOTHROW( WithinULP(1.f, 0) )
 
 Matchers.tests.cpp:<line number>: PASSED:
-  REQUIRE_THROWS_AS( WithinULP(1.f, -1), std::domain_error )
+  REQUIRE_THROWS_AS( WithinULP(1.f, static_cast<uint64_t>(-1)), std::domain_error )
 
 -------------------------------------------------------------------------------
 Generators -- adapters
@@ -6367,6 +6343,70 @@ with expansion:
   true == true
 
 -------------------------------------------------------------------------------
+Parse test names and tags
+  Leading and trailing spaces in test spec
+-------------------------------------------------------------------------------
+CmdLine.tests.cpp:<line number>
+...............................................................................
+
+CmdLine.tests.cpp:<line number>: PASSED:
+  CHECK( spec.matches( fakeTestCase( "  aardvark " ) ) )
+with expansion:
+  true
+
+CmdLine.tests.cpp:<line number>: PASSED:
+  CHECK( spec.matches( fakeTestCase( "  aardvark" ) ) )
+with expansion:
+  true
+
+CmdLine.tests.cpp:<line number>: PASSED:
+  CHECK( spec.matches( fakeTestCase( " aardvark " ) ) )
+with expansion:
+  true
+
+CmdLine.tests.cpp:<line number>: PASSED:
+  CHECK( spec.matches( fakeTestCase( "aardvark " ) ) )
+with expansion:
+  true
+
+CmdLine.tests.cpp:<line number>: PASSED:
+  CHECK( spec.matches( fakeTestCase( "aardvark" ) ) )
+with expansion:
+  true
+
+-------------------------------------------------------------------------------
+Parse test names and tags
+  Leading and trailing spaces in test name
+-------------------------------------------------------------------------------
+CmdLine.tests.cpp:<line number>
+...............................................................................
+
+CmdLine.tests.cpp:<line number>: PASSED:
+  CHECK( spec.matches( fakeTestCase( "  aardvark " ) ) )
+with expansion:
+  true
+
+CmdLine.tests.cpp:<line number>: PASSED:
+  CHECK( spec.matches( fakeTestCase( "  aardvark" ) ) )
+with expansion:
+  true
+
+CmdLine.tests.cpp:<line number>: PASSED:
+  CHECK( spec.matches( fakeTestCase( " aardvark " ) ) )
+with expansion:
+  true
+
+CmdLine.tests.cpp:<line number>: PASSED:
+  CHECK( spec.matches( fakeTestCase( "aardvark " ) ) )
+with expansion:
+  true
+
+CmdLine.tests.cpp:<line number>: PASSED:
+  CHECK( spec.matches( fakeTestCase( "aardvark" ) ) )
+with expansion:
+  true
+
+-------------------------------------------------------------------------------
 Pointers can be compared to null
 -------------------------------------------------------------------------------
 Condition.tests.cpp:<line number>
@@ -7354,11 +7394,6 @@ Approx.tests.cpp:<line number>: PASSED:
 with expansion:
   Approx( 1.23 ) != 1.24
 
-Approx.tests.cpp:<line number>: PASSED:
-  REQUIRE( INFINITY == Approx(INFINITY) )
-with expansion:
-  inff == Approx( inf )
-
 Message from section one
 -------------------------------------------------------------------------------
 Standard output from all sections is reported
@@ -7714,6 +7749,19 @@ with expansion:
 
 -------------------------------------------------------------------------------
 StringRef
+  Substrings
+  Past the end substring
+-------------------------------------------------------------------------------
+String.tests.cpp:<line number>
+...............................................................................
+
+String.tests.cpp:<line number>: PASSED:
+  REQUIRE( s.substr(s.size() + 1, 123).empty() )
+with expansion:
+  true
+
+-------------------------------------------------------------------------------
+StringRef
   Comparisons
 -------------------------------------------------------------------------------
 String.tests.cpp:<line number>
@@ -7786,24 +7834,6 @@ with expansion:
 -------------------------------------------------------------------------------
 StringRef
   to std::string
-  implicitly constructed
--------------------------------------------------------------------------------
-String.tests.cpp:<line number>
-...............................................................................
-
-String.tests.cpp:<line number>: PASSED:
-  REQUIRE( stdStr == "a stringref" )
-with expansion:
-  "a stringref" == "a stringref"
-
-String.tests.cpp:<line number>: PASSED:
-  REQUIRE( stdStr.size() == sr.size() )
-with expansion:
-  11 == 11
-
--------------------------------------------------------------------------------
-StringRef
-  to std::string
   explicitly constructed
 -------------------------------------------------------------------------------
 String.tests.cpp:<line number>
@@ -7836,28 +7866,6 @@ String.tests.cpp:<line number>: PASSED:
   REQUIRE( stdStr.size() == sr.size() )
 with expansion:
   11 == 11
-
--------------------------------------------------------------------------------
-StringRef
-  Counting utf-8 codepoints
--------------------------------------------------------------------------------
-String.tests.cpp:<line number>
-...............................................................................
-
-String.tests.cpp:<line number>: PASSED:
-  REQUIRE( ascii.numberOfCharacters() == ascii.size() )
-with expansion:
-  39 == 39
-
-String.tests.cpp:<line number>: PASSED:
-  REQUIRE( simpleu8.numberOfCharacters() == 30 )
-with expansion:
-  30 == 30
-
-String.tests.cpp:<line number>: PASSED:
-  REQUIRE( emojis.numberOfCharacters() == 9 )
-with expansion:
-  9 == 9
 
 -------------------------------------------------------------------------------
 Stringifying std::chrono::duration helpers
@@ -8023,6 +8031,30 @@ with expansion:
   1.0 == 1
 
 -------------------------------------------------------------------------------
+Template test case with test types specified inside non-copyable and non-
+movable std::tuple - NonCopyableAndNonMovableTypes - 0
+-------------------------------------------------------------------------------
+Misc.tests.cpp:<line number>
+...............................................................................
+
+Misc.tests.cpp:<line number>: PASSED:
+  REQUIRE( sizeof(TestType) > 0 )
+with expansion:
+  1 > 0
+
+-------------------------------------------------------------------------------
+Template test case with test types specified inside non-copyable and non-
+movable std::tuple - NonCopyableAndNonMovableTypes - 1
+-------------------------------------------------------------------------------
+Misc.tests.cpp:<line number>
+...............................................................................
+
+Misc.tests.cpp:<line number>: PASSED:
+  REQUIRE( sizeof(TestType) > 0 )
+with expansion:
+  4 > 0
+
+-------------------------------------------------------------------------------
 Template test case with test types specified inside non-default-constructible
 std::tuple - MyNonDefaultConstructibleTypes - 0
 -------------------------------------------------------------------------------
@@ -8037,18 +8069,6 @@ with expansion:
 -------------------------------------------------------------------------------
 Template test case with test types specified inside non-default-constructible
 std::tuple - MyNonDefaultConstructibleTypes - 1
--------------------------------------------------------------------------------
-Misc.tests.cpp:<line number>
-...............................................................................
-
-Misc.tests.cpp:<line number>: PASSED:
-  REQUIRE( sizeof(TestType) > 0 )
-with expansion:
-  1 > 0
-
--------------------------------------------------------------------------------
-Template test case with test types specified inside non-default-constructible
-std::tuple - MyNonDefaultConstructibleTypes - 2
 -------------------------------------------------------------------------------
 Misc.tests.cpp:<line number>
 ...............................................................................
@@ -9273,6 +9293,14 @@ with expansion:
   3221225472 (0x<hex digits>) == 3221225472
 
 -------------------------------------------------------------------------------
+Test with special, characters "in name
+-------------------------------------------------------------------------------
+CmdLine.tests.cpp:<line number>
+...............................................................................
+
+CmdLine.tests.cpp:<line number>: PASSED:
+
+-------------------------------------------------------------------------------
 The NO_FAIL macro reports a failure but does not fail the test
 -------------------------------------------------------------------------------
 Message.tests.cpp:<line number>
@@ -9766,6 +9794,68 @@ PartTracker.tests.cpp:<line number>: PASSED:
   REQUIRE( testCase.isComplete() )
 with expansion:
   true
+
+-------------------------------------------------------------------------------
+Trim strings
+-------------------------------------------------------------------------------
+StringManip.tests.cpp:<line number>
+...............................................................................
+
+StringManip.tests.cpp:<line number>: PASSED:
+  REQUIRE( trim(std::string(no_whitespace)) == no_whitespace )
+with expansion:
+  "There is no extra whitespace here"
+  ==
+  "There is no extra whitespace here"
+
+StringManip.tests.cpp:<line number>: PASSED:
+  REQUIRE( trim(std::string(leading_whitespace)) == no_whitespace )
+with expansion:
+  "There is no extra whitespace here"
+  ==
+  "There is no extra whitespace here"
+
+StringManip.tests.cpp:<line number>: PASSED:
+  REQUIRE( trim(std::string(trailing_whitespace)) == no_whitespace )
+with expansion:
+  "There is no extra whitespace here"
+  ==
+  "There is no extra whitespace here"
+
+StringManip.tests.cpp:<line number>: PASSED:
+  REQUIRE( trim(std::string(whitespace_at_both_ends)) == no_whitespace )
+with expansion:
+  "There is no extra whitespace here"
+  ==
+  "There is no extra whitespace here"
+
+StringManip.tests.cpp:<line number>: PASSED:
+  REQUIRE( trim(StringRef(no_whitespace)) == StringRef(no_whitespace) )
+with expansion:
+  There is no extra whitespace here
+  ==
+  There is no extra whitespace here
+
+StringManip.tests.cpp:<line number>: PASSED:
+  REQUIRE( trim(StringRef(leading_whitespace)) == StringRef(no_whitespace) )
+with expansion:
+  There is no extra whitespace here
+  ==
+  There is no extra whitespace here
+
+StringManip.tests.cpp:<line number>: PASSED:
+  REQUIRE( trim(StringRef(trailing_whitespace)) == StringRef(no_whitespace) )
+with expansion:
+  There is no extra whitespace here
+  ==
+  There is no extra whitespace here
+
+StringManip.tests.cpp:<line number>: PASSED:
+  REQUIRE( trim(StringRef(whitespace_at_both_ends)) == StringRef(no_whitespace) )
+with expansion:
+  There is no extra whitespace here
+  ==
+  There is no extra whitespace here
 
 -------------------------------------------------------------------------------
 Unexpected exceptions can be translated
@@ -11252,7 +11342,7 @@ ToString.tests.cpp:<line number>
 ...............................................................................
 
 ToString.tests.cpp:<line number>: PASSED:
-  CHECK_THAT( parseEnums( "" ), Equals( std::vector<std::string>{} ) )
+  CHECK_THAT( parseEnums( "" ), Equals( std::vector<Catch::StringRef>{} ) )
 with expansion:
   {  } Equals: {  }
 
@@ -11264,19 +11354,19 @@ ToString.tests.cpp:<line number>
 ...............................................................................
 
 ToString.tests.cpp:<line number>: PASSED:
-  CHECK_THAT( parseEnums( "ClassName::EnumName::Value1" ), Equals(std::vector<std::string>{"Value1"} ) )
+  CHECK_THAT( parseEnums( "ClassName::EnumName::Value1" ), Equals(std::vector<Catch::StringRef>{"Value1"} ) )
 with expansion:
-  { "Value1" } Equals: { "Value1" }
+  { Value1 } Equals: { Value1 }
 
 ToString.tests.cpp:<line number>: PASSED:
-  CHECK_THAT( parseEnums( "Value1" ), Equals( std::vector<std::string>{"Value1"} ) )
+  CHECK_THAT( parseEnums( "Value1" ), Equals( std::vector<Catch::StringRef>{"Value1"} ) )
 with expansion:
-  { "Value1" } Equals: { "Value1" }
+  { Value1 } Equals: { Value1 }
 
 ToString.tests.cpp:<line number>: PASSED:
-  CHECK_THAT( parseEnums( "EnumName::Value1" ), Equals(std::vector<std::string>{"Value1"} ) )
+  CHECK_THAT( parseEnums( "EnumName::Value1" ), Equals(std::vector<Catch::StringRef>{"Value1"} ) )
 with expansion:
-  { "Value1" } Equals: { "Value1" }
+  { Value1 } Equals: { Value1 }
 
 -------------------------------------------------------------------------------
 parseEnums
@@ -11286,19 +11376,19 @@ ToString.tests.cpp:<line number>
 ...............................................................................
 
 ToString.tests.cpp:<line number>: PASSED:
-  CHECK_THAT( parseEnums( "ClassName::EnumName::Value1, ClassName::EnumName::Value2" ), Equals( std::vector<std::string>{"Value1", "Value2"} ) )
+  CHECK_THAT( parseEnums( "ClassName::EnumName::Value1, ClassName::EnumName::Value2" ), Equals( std::vector<Catch::StringRef>{"Value1", "Value2"} ) )
 with expansion:
-  { "Value1", "Value2" } Equals: { "Value1", "Value2" }
+  { Value1, Value2 } Equals: { Value1, Value2 }
 
 ToString.tests.cpp:<line number>: PASSED:
-  CHECK_THAT( parseEnums( "ClassName::EnumName::Value1, ClassName::EnumName::Value2, ClassName::EnumName::Value3" ), Equals( std::vector<std::string>{"Value1", "Value2", "Value3"} ) )
+  CHECK_THAT( parseEnums( "ClassName::EnumName::Value1, ClassName::EnumName::Value2, ClassName::EnumName::Value3" ), Equals( std::vector<Catch::StringRef>{"Value1", "Value2", "Value3"} ) )
 with expansion:
-  { "Value1", "Value2", "Value3" } Equals: { "Value1", "Value2", "Value3" }
+  { Value1, Value2, Value3 } Equals: { Value1, Value2, Value3 }
 
 ToString.tests.cpp:<line number>: PASSED:
-  CHECK_THAT( parseEnums( "ClassName::EnumName::Value1,ClassName::EnumName::Value2 , ClassName::EnumName::Value3" ), Equals( std::vector<std::string>{"Value1", "Value2", "Value3"} ) )
+  CHECK_THAT( parseEnums( "ClassName::EnumName::Value1,ClassName::EnumName::Value2 , ClassName::EnumName::Value3" ), Equals( std::vector<Catch::StringRef>{"Value1", "Value2", "Value3"} ) )
 with expansion:
-  { "Value1", "Value2", "Value3" } Equals: { "Value1", "Value2", "Value3" }
+  { Value1, Value2, Value3 } Equals: { Value1, Value2, Value3 }
 
 -------------------------------------------------------------------------------
 pointer to class
@@ -11389,15 +11479,15 @@ with expansion:
 replaceInPlace
   replace single char
 -------------------------------------------------------------------------------
-String.tests.cpp:<line number>
+StringManip.tests.cpp:<line number>
 ...............................................................................
 
-String.tests.cpp:<line number>: PASSED:
-  CHECK( Catch::replaceInPlace( letters, "b", "z" ) )
+StringManip.tests.cpp:<line number>: PASSED:
+  CHECK( Catch::replaceInPlace(letters, "b", "z") )
 with expansion:
   true
 
-String.tests.cpp:<line number>: PASSED:
+StringManip.tests.cpp:<line number>: PASSED:
   CHECK( letters == "azcdefcg" )
 with expansion:
   "azcdefcg" == "azcdefcg"
@@ -11406,15 +11496,15 @@ with expansion:
 replaceInPlace
   replace two chars
 -------------------------------------------------------------------------------
-String.tests.cpp:<line number>
+StringManip.tests.cpp:<line number>
 ...............................................................................
 
-String.tests.cpp:<line number>: PASSED:
-  CHECK( Catch::replaceInPlace( letters, "c", "z" ) )
+StringManip.tests.cpp:<line number>: PASSED:
+  CHECK( Catch::replaceInPlace(letters, "c", "z") )
 with expansion:
   true
 
-String.tests.cpp:<line number>: PASSED:
+StringManip.tests.cpp:<line number>: PASSED:
   CHECK( letters == "abzdefzg" )
 with expansion:
   "abzdefzg" == "abzdefzg"
@@ -11423,15 +11513,15 @@ with expansion:
 replaceInPlace
   replace first char
 -------------------------------------------------------------------------------
-String.tests.cpp:<line number>
+StringManip.tests.cpp:<line number>
 ...............................................................................
 
-String.tests.cpp:<line number>: PASSED:
-  CHECK( Catch::replaceInPlace( letters, "a", "z" ) )
+StringManip.tests.cpp:<line number>: PASSED:
+  CHECK( Catch::replaceInPlace(letters, "a", "z") )
 with expansion:
   true
 
-String.tests.cpp:<line number>: PASSED:
+StringManip.tests.cpp:<line number>: PASSED:
   CHECK( letters == "zbcdefcg" )
 with expansion:
   "zbcdefcg" == "zbcdefcg"
@@ -11440,15 +11530,15 @@ with expansion:
 replaceInPlace
   replace last char
 -------------------------------------------------------------------------------
-String.tests.cpp:<line number>
+StringManip.tests.cpp:<line number>
 ...............................................................................
 
-String.tests.cpp:<line number>: PASSED:
-  CHECK( Catch::replaceInPlace( letters, "g", "z" ) )
+StringManip.tests.cpp:<line number>: PASSED:
+  CHECK( Catch::replaceInPlace(letters, "g", "z") )
 with expansion:
   true
 
-String.tests.cpp:<line number>: PASSED:
+StringManip.tests.cpp:<line number>: PASSED:
   CHECK( letters == "abcdefcz" )
 with expansion:
   "abcdefcz" == "abcdefcz"
@@ -11457,15 +11547,15 @@ with expansion:
 replaceInPlace
   replace all chars
 -------------------------------------------------------------------------------
-String.tests.cpp:<line number>
+StringManip.tests.cpp:<line number>
 ...............................................................................
 
-String.tests.cpp:<line number>: PASSED:
-  CHECK( Catch::replaceInPlace( letters, letters, "replaced" ) )
+StringManip.tests.cpp:<line number>: PASSED:
+  CHECK( Catch::replaceInPlace(letters, letters, "replaced") )
 with expansion:
   true
 
-String.tests.cpp:<line number>: PASSED:
+StringManip.tests.cpp:<line number>: PASSED:
   CHECK( letters == "replaced" )
 with expansion:
   "replaced" == "replaced"
@@ -11474,15 +11564,15 @@ with expansion:
 replaceInPlace
   replace no chars
 -------------------------------------------------------------------------------
-String.tests.cpp:<line number>
+StringManip.tests.cpp:<line number>
 ...............................................................................
 
-String.tests.cpp:<line number>: PASSED:
-  CHECK_FALSE( Catch::replaceInPlace( letters, "x", "z" ) )
+StringManip.tests.cpp:<line number>: PASSED:
+  CHECK_FALSE( Catch::replaceInPlace(letters, "x", "z") )
 with expansion:
   !false
 
-String.tests.cpp:<line number>: PASSED:
+StringManip.tests.cpp:<line number>: PASSED:
   CHECK( letters == letters )
 with expansion:
   "abcdefcg" == "abcdefcg"
@@ -11491,15 +11581,15 @@ with expansion:
 replaceInPlace
   escape '
 -------------------------------------------------------------------------------
-String.tests.cpp:<line number>
+StringManip.tests.cpp:<line number>
 ...............................................................................
 
-String.tests.cpp:<line number>: PASSED:
-  CHECK( Catch::replaceInPlace( s, "'", "|'" ) )
+StringManip.tests.cpp:<line number>: PASSED:
+  CHECK( Catch::replaceInPlace(s, "'", "|'") )
 with expansion:
   true
 
-String.tests.cpp:<line number>: PASSED:
+StringManip.tests.cpp:<line number>: PASSED:
   CHECK( s == "didn|'t" )
 with expansion:
   "didn|'t" == "didn|'t"
@@ -11550,21 +11640,21 @@ with expansion:
 -------------------------------------------------------------------------------
 splitString
 -------------------------------------------------------------------------------
-String.tests.cpp:<line number>
+StringManip.tests.cpp:<line number>
 ...............................................................................
 
-String.tests.cpp:<line number>: PASSED:
-  CHECK_THAT( splitStringRef("", ',' ), Equals(std::vector<StringRef>() ) )
+StringManip.tests.cpp:<line number>: PASSED:
+  CHECK_THAT( splitStringRef("", ','), Equals(std::vector<StringRef>()) )
 with expansion:
   {  } Equals: {  }
 
-String.tests.cpp:<line number>: PASSED:
-  CHECK_THAT( splitStringRef("abc", ',' ), Equals(std::vector<StringRef>{"abc"} ) )
+StringManip.tests.cpp:<line number>: PASSED:
+  CHECK_THAT( splitStringRef("abc", ','), Equals(std::vector<StringRef>{"abc"}) )
 with expansion:
   { abc } Equals: { abc }
 
-String.tests.cpp:<line number>: PASSED:
-  CHECK_THAT( splitStringRef("abc,def", ',' ), Equals(std::vector<StringRef>{"abc", "def"} ) )
+StringManip.tests.cpp:<line number>: PASSED:
+  CHECK_THAT( splitStringRef("abc,def", ','), Equals(std::vector<StringRef>{"abc", "def"}) )
 with expansion:
   { abc, def } Equals: { abc, def }
 
@@ -12409,6 +12499,6 @@ Misc.tests.cpp:<line number>
 Misc.tests.cpp:<line number>: PASSED:
 
 ===============================================================================
-test cases:  298 |  208 passed |  86 failed |  4 failed as expected
-assertions: 1570 | 1401 passed | 148 failed | 21 failed as expected
+test cases:  300 |  210 passed |  86 failed |  4 failed as expected
+assertions: 1581 | 1412 passed | 148 failed | 21 failed as expected
 

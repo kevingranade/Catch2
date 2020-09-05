@@ -9,7 +9,7 @@
 #include "catch_reporter_console.h"
 
 #include "../internal/catch_reporter_registrars.hpp"
-#include "internal/catch_console_colour.h"
+#include "../internal/catch_console_colour.h"
 #include "../internal/catch_version.h"
 #include "../internal/catch_text.h"
 #include "../internal/catch_stringref.h"
@@ -268,7 +268,7 @@ public:
 
     }
     friend auto operator << (std::ostream& os, Duration const& duration) -> std::ostream& {
-        return os << duration.value() << " " << duration.unitsAsString();
+        return os << duration.value() << ' ' << duration.unitsAsString();
     }
 };
 } // end anon namespace
@@ -300,9 +300,9 @@ public:
 				headerCols += Column(info.name).width(static_cast<std::size_t>(info.width - 2));
 				headerCols += spacer;
 			}
-			m_os << headerCols << "\n";
+			m_os << headerCols << '\n';
 
-            m_os << Catch::getLineOfChars<'-'>() << "\n";
+            m_os << Catch::getLineOfChars<'-'>() << '\n';
         }
     }
     void close() {
@@ -321,13 +321,12 @@ public:
 
     friend TablePrinter& operator << (TablePrinter& tp, ColumnBreak) {
         auto colStr = tp.m_oss.str();
-        // This takes account of utf8 encodings
-        auto strSize = Catch::StringRef(colStr).numberOfCharacters();
+        const auto strSize = colStr.size();
         tp.m_oss.str("");
         tp.open();
         if (tp.m_currentColumn == static_cast<int>(tp.m_columnInfos.size() - 1)) {
             tp.m_currentColumn = -1;
-            tp.m_os << "\n";
+            tp.m_os << '\n';
         }
         tp.m_currentColumn++;
 
@@ -336,15 +335,15 @@ public:
             ? std::string(colInfo.width - (strSize + 2), ' ')
             : std::string();
         if (colInfo.justification == ColumnInfo::Left)
-            tp.m_os << colStr << padding << " ";
+            tp.m_os << colStr << padding << ' ';
         else
-            tp.m_os << padding << colStr << " ";
+            tp.m_os << padding << colStr << ' ';
         return tp;
     }
 
     friend TablePrinter& operator << (TablePrinter& tp, RowBreak) {
         if (tp.m_currentColumn > 0) {
-            tp.m_os << "\n";
+            tp.m_os << '\n';
             tp.m_currentColumn = -1;
         }
         return tp;
@@ -449,7 +448,7 @@ void ConsoleReporter::benchmarkEnded(BenchmarkStats<> const& stats) {
 void ConsoleReporter::benchmarkFailed(std::string const& error) {
 	Colour colour(Colour::Red);
     (*m_tablePrinter)
-        << "Benchmark failed (" << error << ")"
+        << "Benchmark failed (" << error << ')'
         << ColumnBreak() << RowBreak();
 }
 #endif // CATCH_CONFIG_ENABLE_BENCHMARKING
@@ -531,11 +530,10 @@ void ConsoleReporter::printTestCaseAndSectionHeader() {
 
     SourceLineInfo lineInfo = m_sectionStack.back().lineInfo;
 
-    if (!lineInfo.empty()) {
-        stream << getLineOfChars<'-'>() << '\n';
-        Colour colourGuard(Colour::FileName);
-        stream << lineInfo << '\n';
-    }
+
+    stream << getLineOfChars<'-'>() << '\n';
+    Colour colourGuard(Colour::FileName);
+    stream << lineInfo << '\n';
     stream << getLineOfChars<'.'>() << '\n' << std::endl;
 }
 
