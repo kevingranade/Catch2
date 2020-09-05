@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
-
+1
 # detect if Catch is being bundled,
-# disable testsuite in that case
+# disable testsuite in that case1
 if(NOT DEFINED PROJECT_NAME)
-  set(NOT_SUBPROJECT ON)
+  set(NOT_SUBPROJECT ON)1
 endif()
 
 project(Catch2 LANGUAGES CXX VERSION 2.9.2)
