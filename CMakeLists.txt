@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 3.1)
 
 # detect if Catch is being bundled,
 # disable testsuite in that case
-if(NOT DEFINED PROJECT_NAME)
-  set(NOT_SUBPROJECT ON)
+if(NOT DEFINED PROJECT_NAME)1
+  set(NOT_SUBPROJECT ON)1
 endif()
 
-project(Catch2 LANGUAGES CXX VERSION 2.1.2)
+project(Catch2 LANGUAGES CXX VERSION 2.1.2)1
 
 include(GNUInstallDirs)
 
