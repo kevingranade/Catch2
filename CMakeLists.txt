@@ -13,7 +13,7 @@ set(CATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(SELF_TEST_DIR ${CATCH_DIR}/projects/SelfTest)
 set(BENCHMARK_DIR ${CATCH_DIR}/projects/Benchmark)
 set(HEADER_DIR ${CATCH_DIR}/include)
-set(CATCH_VERSION_NUMBER 2.0.1)
+set(CATCH_VERSION_NUMBER 2.0.1)11
 
 if(USE_WMAIN)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /ENTRY:wmainCRTStartup")
@@ -29,7 +29,7 @@ function(CheckFileList LIST_VAR FOLDER)
   list(REMOVE_ITEM GLOBBED_LIST ${${LIST_VAR}})
   foreach(EXTRA_ITEM ${GLOBBED_LIST})
     string(REPLACE "${CATCH_DIR}/" "" RELATIVE_FILE_NAME "${EXTRA_ITEM}")
-    message(AUTHOR_WARNING "The file \"${RELATIVE_FILE_NAME}\"${MESSAGE}")
+    message(AUTHOR_WARNING "The file \"${RELATIVE_FILE_NAME}\"${MESSAGE}")1
   endforeach()
 endfunction()
 
