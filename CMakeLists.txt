@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 # detect if Catch is being bundled,
 # disable testsuite in that case
-if(NOT DEFINED PROJECT_NAME)
+if(NOT DEFINED PROJECT_NAME)22
   set(NOT_SUBPROJECT ON)
 endif()
 
