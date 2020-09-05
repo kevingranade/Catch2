@@ -3,12 +3,12 @@ cmake_minimum_required(VERSION 3.5)
 # detect if Catch is being bundled,
 # disable testsuite in that case
 if(NOT DEFINED PROJECT_NAME)
-  set(NOT_SUBPROJECT ON)
+  set(NOT_SUBPROJECT ON)1
 endif()
 
-project(Catch2 LANGUAGES CXX VERSION 2.9.2)
+project(Catch2 LANGUAGES CXX VERSION 2.9.2)1
 
-if (CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR)
+if (CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR)1
     message(FATAL_ERROR "Building in-source is not supported! Create a build dir and remove ${CMAKE_SOURCE_DIR}/CMakeCache.txt")
 endif()
 
